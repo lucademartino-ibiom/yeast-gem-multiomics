@@ -1,37 +1,814 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yeast GEM + Pathview</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <style>
+    :root {
+      --navy: #0a2e57;
+      --navy-2: #0d3f74;
+      --teal: #19c2cf;
+      --teal-dark: #11aab6;
+      --text: #14304f;
+      --muted: #5f7185;
+      --light: #f4f8fb;
+      --white: #ffffff;
+      --line: #dbe6ef;
+      --card: #f9fcff;
+      --shadow: 0 18px 40px rgba(10, 46, 87, 0.10);
+      --radius: 22px;
+      --maxw: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: #ffffff;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--maxw), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .topbar {
+      background: #fff;
+      padding: 22px 0;
+      border-bottom: 1px solid #eef3f8;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      width: 230px;
+      max-width: 52vw;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .github-link {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f7fa;
+      color: #111827;
+      font-size: 1.55rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .github-link:hover {
+      transform: translateY(-2px);
+      background: #ebf1f6;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 88% 20%, rgba(71, 187, 255, 0.45), transparent 18%),
+        radial-gradient(circle at 92% 14%, rgba(25, 194, 207, 0.18), transparent 25%),
+        linear-gradient(135deg, #08294b 0%, #0a2e57 55%, #11487f 100%);
+      color: #fff;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(255,255,255,0.13) 0 2px, transparent 3px),
+        radial-gradient(circle at 78% 15%, rgba(255,255,255,0.13) 0 2px, transparent 3px),
+        radial-gradient(circle at 90% 30%, rgba(255,255,255,0.13) 0 2px, transparent 3px);
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 34px;
+      align-items: center;
+      min-height: 620px;
+      padding: 64px 0 56px;
+    }
+
+    .hero-copy h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.3rem, 5vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+    }
+
+    .hero-accent {
+      width: 86px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--teal);
+      margin: 0 0 28px;
+    }
+
+    .hero-copy p {
+      margin: 0 0 34px;
+      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+      color: rgba(255,255,255,0.92);
+      max-width: 690px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .btn-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 34px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #26c7d3, #1ab7c3);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.55rem;
+      box-shadow: 0 14px 30px rgba(25, 194, 207, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-launch:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 38px rgba(25, 194, 207, 0.34);
+    }
+
+    .btn-launch i {
+      font-size: 1.4rem;
+    }
+
+    .hero-sub-link {
+      font-size: 1.05rem;
+      color: #7ee6ef;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 8px;
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .screen-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 610px;
+    }
+
+    .screen-glow {
+      position: absolute;
+      inset: 8% 4% 18% 4%;
+      background: radial-gradient(circle, rgba(26,183,195,0.23), transparent 60%);
+      filter: blur(22px);
+      z-index: 0;
+    }
+
+    .laptop {
+      position: relative;
+      z-index: 1;
+      background: #0f1722;
+      border-radius: 22px 22px 14px 14px;
+      padding: 18px 18px 10px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.34);
+      border: 2px solid rgba(255,255,255,0.08);
+    }
+
+    .laptop-bar {
+      height: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .screen {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .laptop-base {
+      width: 112%;
+      margin-left: -6%;
+      height: 18px;
+      background: linear-gradient(180deg, #d8dde3, #9fa9b6);
+      border-radius: 0 0 18px 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    /* Features */
+    .section {
+      padding: 58px 0;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid #eef3f7;
+      border-bottom: 1px solid #eef3f7;
+      background: #fff;
+    }
+
+    .feature {
+      text-align: center;
+      padding: 28px 24px 30px;
+      position: relative;
+    }
+
+    .feature:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 22%;
+      width: 1px;
+      height: 56%;
+      background: var(--line);
+    }
+
+    .feature-icon {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 20px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 2rem;
+      background: var(--navy);
+    }
+
+    .feature:nth-child(2) .feature-icon,
+    .feature:nth-child(4) .feature-icon {
+      background: #26bfc7;
+    }
+
+    .feature h3 {
+      margin: 0 0 12px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .feature p {
+      margin: 0 auto;
+      max-width: 260px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    /* Section title */
+    .section-title {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .section-title .underline {
+      width: 52px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--teal);
+      margin: 14px auto 0;
+    }
+
+    /* Steps */
+    .steps-wrap {
+      margin-top: 20px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 18px 24px;
+      text-align: center;
+      box-shadow: 0 8px 22px rgba(16, 49, 82, 0.04);
+      position: relative;
+      min-height: 310px;
+    }
+
+    .step-icon {
+      width: 82px;
+      height: 82px;
+      border-radius: 999px;
+      margin: 0 auto 18px;
+      background: #eef4f9;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+    }
+
+    .step-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .step h4 {
+      margin: 0 0 10px;
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .step-arrow {
+      display: none;
+    }
+
+    /* Info band */
+    .info-band {
+      margin-top: 34px;
+      background: #eef7f8;
+      border-radius: 24px;
+      padding: 28px 34px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .info-left {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .info-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      border: 3px solid var(--teal);
+      color: var(--teal-dark);
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      flex: 0 0 auto;
+      background: #fff;
+    }
+
+    .info-left p {
+      margin: 0;
+      font-size: 1.05rem;
+      color: #203b5a;
+    }
+
+    .info-left strong {
+      color: #1b9cab;
+    }
+
+    .info-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .info-right img {
+      max-width: 320px;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 42px;
+      background: linear-gradient(135deg, #062748, #0a2e57 60%, #0f4276);
+      color: #fff;
+      padding: 36px 0 22px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 22px;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .footer-item i {
+      font-size: 2rem;
+      color: var(--teal);
+      margin-top: 2px;
+      width: 34px;
+      text-align: center;
+    }
+
+    .footer-item h5 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .footer-item p,
+    .footer-item a {
+      margin: 0;
+      color: rgba(255,255,255,0.9);
+      font-size: 1rem;
+      word-break: break-word;
+    }
+
+    .footer-item a:hover {
+      color: #a9f2f7;
+    }
+
+    .footer-bottom {
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      text-align: center;
+      color: rgba(255,255,255,0.78);
+      font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-copy p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions {
+        align-items: center;
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .feature:nth-child(2)::after {
+        display: none;
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .info-band {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        padding: 18px 0;
+      }
+
+      .brand-logo {
+        width: 180px;
+      }
+
+      .hero-inner {
+        min-height: auto;
+        padding: 42px 0 42px;
+      }
+
+      .btn-launch {
+        font-size: 1.2rem;
+        padding: 16px 24px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .feature::after {
+        display: none !important;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        min-height: auto;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-left {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
+<body>
 
-<body style="font-family: Arial; text-align: center; margin-top: 60px; background-color:#f5f7fa;">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <img src="ibiom-logo.png" alt="IBIOM logo" class="brand-logo">
+      </div>
 
-  <h1>🧬 Yeast GEM + Pathview</h1>
+      <a
+        class="github-link"
+        href="https://github.com/lucademartino-ibiom/yeast-gem-multiomics"
+        target="_blank"
+        aria-label="GitHub repository"
+      >
+        <i class="fa-brands fa-github"></i>
+      </a>
+    </div>
+  </header>
 
-  <p style="font-size:18px;">
-    Interactive tool for subsystem analysis and KEGG pathway visualization
-  </p>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1>Yeast GEM + Pathview</h1>
+        <div class="hero-accent"></div>
+        <p>
+          Interactive tool for subsystem analysis and KEGG pathway
+          visualization in <em>Saccharomyces cerevisiae</em>.
+        </p>
 
-  <br>
+        <div class="hero-actions">
+          <a
+            class="btn-launch"
+            href="https://lucademartino-ibiom.shinyapps.io/yeast-gem-multiomics/"
+            target="_blank"
+          >
+            <i class="fa-solid fa-rocket"></i>
+            <span>Launch the App</span>
+          </a>
 
-  <a href="https://lucademartino-ibiom.shinyapps.io/yeast-gem-multiomics/" target="_blank">
-    <button style="font-size:20px; padding:15px 30px; cursor:pointer; background-color:#007bff; color:white; border:none; border-radius:8px;">
-      🚀 Launch App
-    </button>
-  </a>
+          <a
+            class="hero-sub-link"
+            href="https://lucademartino-ibiom.shinyapps.io/yeast-gem-multiomics/"
+            target="_blank"
+          >
+            Open in a new tab <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
 
-  <br><br>
+      <div class="hero-visual">
+        <div class="screen-wrap">
+          <div class="screen-glow"></div>
 
-  <h2>How to use</h2>
+          <div class="laptop">
+            <div class="laptop-bar">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
 
-  <p>
-    1. Upload <b>yeast-GEM.xlsx</b><br>
-    2. Click <b>Load example</b><br>
-    3. Run analysis<br>
-    4. Generate KEGG Pathview<br>
-    5. Download results
-  </p>
+            <div class="screen">
+              <img src="app-preview.png" alt="App preview">
+            </div>
+          </div>
+
+          <div class="laptop-base"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon"><i class="fa-solid fa-database"></i></div>
+          <h3>Subsystem Analysis</h3>
+          <p>
+            Identify genes and metabolites involved in yeast metabolic subsystems.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><i class="fa-solid fa-code-branch"></i></div>
+          <h3>KEGG Pathview</h3>
+          <p>
+            Visualize gene and metabolite changes directly on KEGG pathway maps.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><i class="fa-solid fa-download"></i></div>
+          <h3>Export Results</h3>
+          <p>
+            Download reports and pathway images for your analyses.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon"><i class="fa-solid fa-flask"></i></div>
+          <h3>Example Data</h3>
+          <p>
+            Load example values to try the app with ready-to-use inputs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how-to-use">
+    <div class="container">
+      <div class="section-title">
+        <h2>How to use</h2>
+        <div class="underline"></div>
+      </div>
+
+      <div class="steps-wrap">
+        <div class="steps">
+          <div class="step">
+            <div class="step-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="step-number">1</div>
+            <h4>Upload</h4>
+            <p>Upload your <strong>yeast-GEM.xlsx</strong> file.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-icon"><i class="fa-regular fa-file-lines"></i></div>
+            <div class="step-number">2</div>
+            <h4>Load example</h4>
+            <p>Click “Load example” to use example genes and metabolites.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-icon"><i class="fa-solid fa-chart-simple"></i></div>
+            <div class="step-number">3</div>
+            <h4>Run analysis</h4>
+            <p>Run the subsystem analysis to identify matches.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="step-number">4</div>
+            <h4>Generate Pathview</h4>
+            <p>Select a KEGG pathway and visualize your data on the map.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-icon"><i class="fa-solid fa-download"></i></div>
+            <div class="step-number">5</div>
+            <h4>Download</h4>
+            <p>Download the report and pathway image (PNG).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-band">
+        <div class="info-left">
+          <div class="info-icon">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <p>
+            This app is developed by <strong>IBIOM – CNR</strong><br>
+            Istituto di Biomembrane, Bioenergetica e Biotecnologie Molecolari<br>
+            Consiglio Nazionale delle Ricerche
+          </p>
+        </div>
+
+        <div class="info-right">
+          <img src="ibiom-logo.png" alt="IBIOM logo">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-item">
+          <i class="fa-regular fa-envelope"></i>
+          <div>
+            <h5>Contact</h5>
+            <p>luca.demartino@ibiom.cnr.it</p>
+          </div>
+        </div>
+
+        <div class="footer-item">
+          <i class="fa-solid fa-globe"></i>
+          <div>
+            <h5>More information</h5>
+            <a href="https://www.ibiom.cnr.it" target="_blank">https://www.ibiom.cnr.it</a>
+          </div>
+        </div>
+
+        <div class="footer-item">
+          <i class="fa-brands fa-github"></i>
+          <div>
+            <h5>GitHub Repository</h5>
+            <a href="https://github.com/lucademartino-ibiom/yeast-gem-multiomics" target="_blank">
+              Visit the project page
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2025 IBIOM – CNR | All rights reserved
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>
